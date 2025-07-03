@@ -1,5 +1,6 @@
 package com.ftgo.restaurant.restaurantservice.service;
 
+import com.ftgo.restaurant.restaurantservice.dto.CreateRestaurantDto;
 import com.ftgo.restaurant.restaurantservice.dto.RestaurantDto;
 import com.ftgo.restaurant.restaurantservice.model.Restaurant;
 import com.ftgo.restaurant.restaurantservice.repository.RestaurantRepository;
@@ -14,6 +15,29 @@ import java.util.stream.Collectors;
 public class RestaurantService {
     
     private final RestaurantRepository restaurantRepository;
+    
+    public RestaurantDto createRestaurant(CreateRestaurantDto createRestaurantDto) {
+        Restaurant restaurant = new Restaurant();
+        restaurant.setName(createRestaurantDto.getName());
+        restaurant.setAddress(createRestaurantDto.getAddress());
+        restaurant.setLatitude(createRestaurantDto.getLatitude());
+        restaurant.setLongitude(createRestaurantDto.getLongitude());
+        restaurant.setPhone(createRestaurantDto.getPhone());
+        restaurant.setCuisineType(createRestaurantDto.getCuisineType());
+        
+        Restaurant savedRestaurant = restaurantRepository.save(restaurant);
+        
+        return new RestaurantDto(
+                savedRestaurant.getId(),
+                savedRestaurant.getName(),
+                savedRestaurant.getAddress(),
+                savedRestaurant.getLatitude(),
+                savedRestaurant.getLongitude(),
+                savedRestaurant.getPhone(),
+                savedRestaurant.getCuisineType(),
+                null // No distance for creation response
+        );
+    }
     
     public List<RestaurantDto> getNearRestaurants(Double userLatitude, Double userLongitude, Double radiusKm) {
         List<Restaurant> allRestaurants = restaurantRepository.findAll();

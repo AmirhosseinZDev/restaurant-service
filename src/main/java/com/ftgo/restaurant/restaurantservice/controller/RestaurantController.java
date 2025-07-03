@@ -1,8 +1,11 @@
 package com.ftgo.restaurant.restaurantservice.controller;
 
+import com.ftgo.restaurant.restaurantservice.dto.CreateRestaurantDto;
 import com.ftgo.restaurant.restaurantservice.dto.RestaurantDto;
 import com.ftgo.restaurant.restaurantservice.service.RestaurantService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +17,12 @@ import java.util.List;
 public class RestaurantController {
     
     private final RestaurantService restaurantService;
+    
+    @PostMapping
+    public ResponseEntity<RestaurantDto> createRestaurant(@Valid @RequestBody CreateRestaurantDto createRestaurantDto) {
+        RestaurantDto createdRestaurant = restaurantService.createRestaurant(createRestaurantDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdRestaurant);
+    }
     
     @GetMapping("/near")
     public ResponseEntity<List<RestaurantDto>> getNearRestaurants(
